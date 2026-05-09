@@ -1,0 +1,17 @@
+# 核心依賴
+requests>=2.31.0
+python-dateutil>=2.8.2
+
+# 數據抓取
+yfinance>=0.2.0
+pandas>=2.0.0
+
+# AI 分析
+anthropic>=0.28.0
+
+# 語音合成 (可選)
+google-cloud-texttospeech>=2.14.0  # Google Cloud TTS
+azure-cognitiveservices-speech>=1.31.0  # Azure TTS
+
+# 日誌和工具
+python-dotenv>=1.0.0
