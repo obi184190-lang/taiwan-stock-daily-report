@@ -1,0 +1,121 @@
+{
+  "sectors": {
+    "semiconductor": {
+      "name": "半導體",
+      "stocks": [
+        {
+          "code": "2330",
+          "name": "台積電"
+        },
+        {
+          "code": "2454",
+          "name": "聯發科"
+        },
+        {
+          "code": "3034",
+          "name": "聯詠"
+        }
+      ]
+    },
+    "electronics": {
+      "name": "電子零組件",
+      "stocks": [
+        {
+          "code": "2317",
+          "name": "鴻海"
+        },
+        {
+          "code": "4938",
+          "name": "和碩"
+        }
+      ]
+    },
+    "telecommunications": {
+      "name": "電信",
+      "stocks": [
+        {
+          "code": "2412",
+          "name": "中華電"
+        },
+        {
+          "code": "2881",
+          "name": "富邦金"
+        }
+      ]
+    },
+    "finance": {
+      "name": "金融保險",
+      "stocks": [
+        {
+          "code": "2881",
+          "name": "富邦金"
+        },
+        {
+          "code": "2882",
+          "name": "國泰金"
+        },
+        {
+          "code": "2891",
+          "name": "中信金"
+        }
+      ]
+    },
+    "petrochemical": {
+      "name": "石化",
+      "stocks": [
+        {
+          "code": "1301",
+          "name": "台塑"
+        },
+        {
+          "code": "1303",
+          "name": "南亞"
+        }
+      ]
+    },
+    "steel": {
+      "name": "鋼鐵",
+      "stocks": [
+        {
+          "code": "2002",
+          "name": "中鋼"
+        }
+      ]
+    },
+    "transportation": {
+      "name": "運輸",
+      "stocks": [
+        {
+          "code": "2637",
+          "name": "慧洋-KY"
+        }
+      ]
+    }
+  },
+  "monitoring": {
+    "etf_indicators": [
+      {
+        "code": "0050",
+        "name": "元大台灣50"
+      },
+      {
+        "code": "0051",
+        "name": "元大高股息"
+      }
+    ],
+    "market_indices": [
+      {
+        "code": "^TWII",
+        "name": "台灣加權指數"
+      },
+      {
+        "code": "^TWNX",
+        "name": "台灣電子指數"
+      },
+      {
+        "code": "^TWFM",
+        "name": "台灣金融指數"
+      }
+    ]
+  }
+}
