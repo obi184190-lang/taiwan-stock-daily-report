@@ -47,7 +47,7 @@ class MarketAnalyzer:
         
         market_summary = json.dumps(self.market_data, ensure_ascii=False, indent=2)
         
-        prompt = f"""你是一位資深的金融市場分析師，專門分析台灣股市的走勢和類股輪動。
+        prompt = f"""你是一位資深的金融市場分析師，專門分析台灣股市的走勢和股股輪動。請使用純文字格式輸出，不要使用任何 HTML 標籤（如 <b>、<u> 等），也不要使用 Markdown 語法（如 **粗體**）。
 
 今天是 {datetime.now(TW_TZ).strftime('%Y年%m月%d日 %H:%M')} (台灣時間)
 
