@@ -47,11 +47,12 @@ class TelegramSender:
         try:
             url = f"{self.api_url}/sendMessage"
             payload = {
-                'chat_id': self.chat_id,
-                'text': text,
-                'parse_mode': parse_mode,
-                'disable_web_page_preview': True
-            }
+    'chat_id': self.chat_id,
+    'text': text,
+    'disable_web_page_preview': True
+}
+if parse_mode:
+    payload['parse_mode'] = parse_mode
             
             response = requests.post(url, json=payload, timeout=10)
             
