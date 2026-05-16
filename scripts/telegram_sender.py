@@ -132,11 +132,8 @@ class TelegramSender:
             # 標題訊息
             header = f"""📊 國際台股聯動日報
 日期: {datetime.now(TW_TZ).strftime('%Y年%m月%d日')}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-"""
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-"""
-            
+{'='*30}
+"""            
             # Telegram 訊息長度限制
             max_length = 4096
             messages = [header]
