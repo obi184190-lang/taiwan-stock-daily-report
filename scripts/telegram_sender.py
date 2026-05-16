@@ -38,7 +38,7 @@ class TelegramSender:
             self.available = True
             logger.info("✅ Telegram 配置完成")
     
-    def send_message(self, text, parse_mode='HTML'):
+    def send_message(self, text, parse_mode=None):
         """發送文字訊息"""
         if not self.available:
             logger.error("Telegram 不可用")
@@ -130,8 +130,10 @@ class TelegramSender:
             formatted_text = self._format_report_for_telegram(report_text)
             
             # 標題訊息
-            header = f"""📊 <b>國際台股聯動日報</b>
-<u>日期: {datetime.now(TW_TZ).strftime('%Y年%m月%d日')}</u>
+            header = f"""📊 國際台股聯動日報
+日期: {datetime.now(TW_TZ).strftime('%Y年%m月%d日')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
             
