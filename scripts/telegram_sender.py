@@ -9,7 +9,7 @@ import sys
 import logging
 import requests
 from datetime import datetime, timezone, timedelta
-
+import re
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -105,9 +105,11 @@ class TelegramSender:
     
     def _format_report_for_telegram(self, report_text):
         """將報告格式化為 Telegram 格式"""
-        # HTML 標籤支援
-        html_text = report_text.replace('**', '<b>').replace('__', '<u>')
-        html_text = html_text.replace('##', '<u>').replace('###', '<i>')
+        
+        # HTML 標籤清除
+        html_text = re.sub(r'<[^>]+>', '', report_text)
+        html_text = re.sub(r'\*\*|__', '', html_text)
+        html_text = re.sub(r'#{1,3}\s*', '', html_text)
         
         # 移除過長的 markdown
         lines = html_text.split('\n')
