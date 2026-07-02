@@ -8,6 +8,7 @@ import json
 import os
 import sys
 import logging
+import re
 from datetime import datetime, timezone, timedelta
 from anthropic import Anthropic
 
@@ -21,6 +22,57 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+# ============================================================
+# 激進清理函數 - 移除美股冗餘數據說明
+# ============================================================
+
+def aggressive_clean_us_market_analysis(text: str) -> str:
+    """
+    激進清理美股分析中的冗餘數據說明段落
+    """
+    
+    aggressive_patterns = [
+        r"變動幅度均掛零[^。]*?[。]?",
+        r"變動幅度均為零[^。]*?[。]?",
+        r"當日變動幅度均為零[^。]*?[。]?",
+        r"當日變動幅度均[^。]*?[。]?",
+        r"[^。]*?變動幅度均[^。]*?[。][^。]*?這[代表|通常代表][^。]*?[。]",
+        r"[^。]*?變動幅度均[^。]*?[。][^。]*?或數據尚未更新[^。]*?[。]",
+        r"[^。]*?變動幅度均[^。]*?[。][^。]*?市場處於[^。]*?[。]",
+        r"這代表昨日為美股休市日[^。]*?[。]?",
+        r"代表昨日為美股休市[^。]*?[。]?",
+        r"代表昨日為美國假日[^。]*?[。]?",
+        r"昨日為美股休市日[^。]*?[。]?",
+        r"數據尚未更新至最新收盤[^。]*?[。]?",
+        r"或數據尚未更新[^。]*?[。]?",
+        r"資料更新延遲的狀態[^。]*?[。]?",
+        r"資料更新延遲[^。]*?[。]?",
+        r"數據尚未更新[^。]*?[。]?",
+        r"這通常代表數據為前一[^。]*?交易日[^。]*?[。]?",
+        r"代表數據為前一[^。]*?交易日[^。]*?[。]?",
+        r"前一個交易日的收盤留存[^。]*?[。]?",
+        r"前一交易日的收盤[^。]*?[。]?",
+        r"市場處於靜止狀態[^。]*?[。]?",
+        r"市場處於假日[^。]*?[。]?",
+        r"市場處於[^。]*?狀態[^。]*?[。]?",
+        r"並無新的價格訊號[^。]*?[。]?",
+    ]
+    
+    cleaned = text
+    
+    for pattern in aggressive_patterns:
+        cleaned = re.sub(pattern, '', cleaned, flags=re.DOTALL)
+    
+    cleaned = re.sub(r'\n\s*\n+', '\n\n', cleaned)
+    cleaned = re.sub(r'(\n\s*){3,}', '\n\n', cleaned)
+    cleaned = re.sub(r'\s+([。，！？])', r'\1', cleaned)
+    cleaned = re.sub(r'^\s+', '', cleaned)
+    cleaned = re.sub(r'\s+$', '', cleaned)
+    cleaned = re.sub(r'^儘管如此[，，]', '', cleaned)
+    cleaned = re.sub(r'^\s*儘管如此', '', cleaned)
+    
+    return cleaned.strip()
 
 # 台灣時區
 TW_TZ = timezone(timedelta(hours=8))
@@ -61,9 +113,25 @@ class MarketAnalyzer:
 **日期**：{datetime.now(TW_TZ).strftime('%Y年%m月%d日')}
 
 ### 🌍 昨晚國際情勢與美股走向
-- 分析美股三大指數（S&P 500、納斯達克、道瓊）的表現
-- 說明影響美股的關鍵因素（地緣政治、經濟數據、Fed 政策等）
-- 評估美股走勢對台股的潛在影響
+
+【重要提示】
+如果美股數據顯示變動幅度為零，這是正常現象（假日或數據延遲）。
+請「永遠不要」說以下內容：
+- 「變動幅度均為零」
+- 「這代表昨日為美股休市日」
+- 「數據為前一交易日」
+- 任何關於「數據延遲」的說明
+
+這些都是廢話。請直接分析當前報價的意義，不要解釋為什麼沒有變動。
+
+分析要點：
+- 美股三大指數（S&P 500、納斯達克、道瓊）的當前水位
+- 這些點位在歷史上的相對位置（高位/中位/低位）
+- 反映的市場情緒與投資信心
+- 可能的推動因素（地緣政治、經濟數據、Fed 政策等）
+- 對台股的潛在影響
+
+記住：即使數據有延遲，根據現有報價的分析仍然有價值。
 
 ### 💱 國際匯率變動分析
 - 說明主要匯率（USD/TWD、CNY/USD、JPY/USD）的變化
@@ -123,6 +191,10 @@ class MarketAnalyzer:
             )
             
             self.analysis_report = message.content[0].text
+
+            self.analysis_report = aggressive_clean_us_market_analysis(self.analysis_report)
+            logger.info("✅ 冗餘內容已清理")
+            
             logger.info("✅ AI 分析報告生成成功")
             return True
         
